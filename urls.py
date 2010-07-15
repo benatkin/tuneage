@@ -1,17 +1,20 @@
 from django.conf.urls.defaults import *
+from django.contrib import admin
+from django.conf import settings
+import os
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^my_proj/', include('my_proj.foo.urls')),
+    ('^$', 'django.views.generic.simple.redirect_to', {'url': '/admin/'}),
 
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin.site.urls)),
+
+    url(
+        r'^media/(.*)$',
+        'django.views.static.serve',
+        kwargs={'document_root': os.path.join(settings.PROJECT_PATH, 'media')}
+    ),
 )
